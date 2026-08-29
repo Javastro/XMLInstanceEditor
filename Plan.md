@@ -19,6 +19,8 @@ The core technical challenge is that XSD is expressive (choices, sequences, recu
 - Validation service (validate generated instance against original XSD)
 - Optional: XML generation/serialization service if you want heavy lifting off the client
 
+Use quarkus Quinoa extension to serve the Svelte frontend as static assets, so you can deploy this as a single Quarkus app.
+
 You *can* do this client-side only (there are JS XSD parsers), but pushing parsing/validation to a backend using a mature library (e.g. `xmlschema` in Python, or Java's Xerces via a microservice) gives you much more reliable XSD compliance than any JS-native parser currently offers. I'd recommend: backend does parsing + validation, frontend just renders and edits.
 
 ## Step 1: Convert XSD → internal schema model
@@ -98,7 +100,7 @@ Round-trip the generated XML back through a real XSD validator (don't trust your
 
 ## Suggested stack
 
-### Backend
+### Backend - Quarkus (Java)
 
 Java is actually a strong fit for this — the XSD tooling ecosystem there is more mature than JS or even Python, since Java's own JAXB/Xerces stack grew up alongside the XSD spec itself.
 
@@ -274,11 +276,10 @@ This is the part that benefits most from Svelte specifically:
 
 `<svelte:self>` is the clean part — no manual registration or forward-declaration needed to let a component recurse into instances of itself, which is exactly your "nested complex type contains more complex types" case.
 
-## One real tradeoff to flag
+## Testing
 
-Component libraries are thinner in the Svelte ecosystem than React's. You listed CodeMirror/Monaco for the XML preview earlier — both are framework-agnostic and embed fine in a Svelte component via a plain `onMount` + ref, so that's a non-issue. But if you were planning to lean on a mature schema-driven form library as a starting point rather than building the renderer from scratch (unlikely here, given XSD's semantics don't map to JSON Schema anyway, as I mentioned before), Svelte's options are much sparser than React's. Since your renderer is bespoke either way, this mostly doesn't bite you.
+The canonical set of of schemas to test against are the the IVOA schema in https://github.com/Javastro/ivoa-schemata - they should be included in the project as a gradle dependency for testing purposes. In particular test cases should concentrate on the `VODataService-v1.2.xsd` found in that dependency.
 
-Want me to sketch `ChoiceGroup.svelte` and `RepeatableField.svelte` in full — those are the two components with actual interaction logic (switching branches, add/remove instances) — or the `xmlSerializer.ts` that turns `instanceValues` + the IR into an XML string?
 
 
 

@@ -1,0 +1,1 @@
+export { validateXml } from './schema';
