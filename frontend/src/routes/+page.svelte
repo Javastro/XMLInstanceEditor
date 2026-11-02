@@ -133,7 +133,8 @@
 
 <main>
   <h1>XMLInstance Editor</h1>
-  <SchemaUpload on:load={handleLoad} />
+  <div class="span-all"><SchemaUpload on:load={handleLoad} /></div>
+  <div class="main-col">
   {#if sourceXsd}
     <section>
       <h2>Load XML instance</h2>
@@ -152,10 +153,10 @@
         <button type="button" on:click={handleImportXml}>Import XML into editor</button>
       </div>
       {#if importLoading}
-        <p>Importing XML...</p>
+        <p class="banner info" role="status">Importing XML...</p>
       {/if}
       {#if importError}
-        <p>{importError}</p>
+        <p class="banner error" role="alert">{importError}</p>
       {/if}
     </section>
   {/if}
@@ -181,16 +182,18 @@
   {#key editorKey}
     <InstanceEditor roots={editorRoots} bind:xml={instanceXml} />
   {/key}
-  <button type="button" on:click={() => (instanceXml = $xmlPreview)}>Load generated XML draft</button>
+  <button type="button" class="secondary" on:click={() => (instanceXml = $xmlPreview)}>Load generated XML draft</button>
 
   {#if loading}
-    <p>Parsing schema...</p>
+    <p class="banner info" role="status">Parsing schema...</p>
   {/if}
 
   {#if error}
-    <p>{error}</p>
+    <p class="banner error" role="alert">{error}</p>
   {/if}
+  </div>
 
+  <div class="sticky">
   <XmlPreview xml={$xmlPreview} />
   {#if unknownContent.length > 0}
     <section>
@@ -202,4 +205,14 @@
     </section>
   {/if}
   <ValidationPanel />
+  </div>
 </main>
+
+<style>
+  .main-col,
+  .sticky {
+    display: grid;
+    gap: var(--gap);
+    min-width: 0;
+  }
+</style>

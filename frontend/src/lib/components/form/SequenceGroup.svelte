@@ -13,6 +13,11 @@
     return `${path}.@${attribute.name}`;
   }
 
+  function attributeHasValue(attribute: AttributeNode): boolean {
+    const value = $instanceValues[attributePath(attribute)];
+    return (value !== undefined && value !== '') || Boolean(attribute.defaultValue ?? attribute.fixedValue);
+  }
+
   function updateAttributeValue(attribute: AttributeNode, event: Event) {
     const input = event.currentTarget as HTMLInputElement;
     const key = attributePath(attribute);
@@ -27,8 +32,11 @@
   <legend>{node.name}</legend>
   {#each group.attributes as attribute}
     <div class="attribute">
-      <label>
-        <strong>@{attribute.name}</strong>
+      <label class:field-missing={attribute.required && !attributeHasValue(attribute)}>
+        <strong>
+          @{attribute.name}{#if attribute.required}<span class="required-mark" aria-hidden="true">*</span>{/if}
+          {#if attribute.required && !attributeHasValue(attribute)}<span class="hint">required</span>{/if}
+        </strong>
         {#if attribute.type.constraints.enumeration.length > 0}
           <select
             value={($instanceValues[attributePath(attribute)] as string) ?? attribute.defaultValue ?? ''}

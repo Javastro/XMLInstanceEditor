@@ -9,7 +9,7 @@
 <section>
   <h2>Instance editor</h2>
   {#if roots.length === 0}
-    <p>Load an XSD schema to start editing an instance.</p>
+    <p class="empty">Load an XSD schema to start editing an instance.</p>
   {:else}
     {#each roots as root}
       <SchemaNode node={root} path={root.name} />

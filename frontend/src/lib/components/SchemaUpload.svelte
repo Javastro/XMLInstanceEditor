@@ -67,10 +67,10 @@
       </select>
     </label>
     {#if loadingPreloaded}
-      <p>Loading schema…</p>
+      <p class="banner info" role="status">Loading schema…</p>
     {/if}
     {#if preloadError}
-      <p>{preloadError}</p>
+      <p class="banner error" role="alert">{preloadError}</p>
     {/if}
   {/if}
 

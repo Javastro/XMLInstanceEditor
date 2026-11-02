@@ -10,7 +10,12 @@
   $: repeatPath = `${path}.${node.name}.${childIndex}`;
   $: currentCount = $repeatCounts[repeatPath] ?? Math.max(node.occurrence.minOccurs, 1);
 
+  $: maxOccurs = node.occurrence.maxOccurs ?? -1;
+  $: atMax = maxOccurs > 0 && currentCount >= maxOccurs;
+  $: atMin = currentCount <= Math.max(node.occurrence.minOccurs, 1);
+
   function addItem() {
+    if (atMax) return;
     repeatCounts.update((current) => ({
       ...current,
       [repeatPath]: currentCount + 1
@@ -26,10 +31,14 @@
 </script>
 
 <section>
-  <header>
+  <header class="repeat-header">
     <strong>{node.name}</strong>
-    <button type="button" on:click={addItem}>Add</button>
-    <button type="button" on:click={removeItem}>Remove</button>
+    <span class="count">
+      {currentCount}{maxOccurs > 0 ? ` / ${maxOccurs}` : ''}
+      {#if node.occurrence.minOccurs > 0}(min {node.occurrence.minOccurs}){/if}
+    </span>
+    <button type="button" on:click={addItem} disabled={atMax}>Add</button>
+    <button type="button" class="danger" on:click={removeItem} disabled={atMin}>Remove</button>
   </header>
 
   {#each Array(currentCount) as _, index}

@@ -7,6 +7,10 @@
 
   const simpleType = node.typeDefinition as SimpleType;
 
+  $: required = node.occurrence.minOccurs > 0;
+  $: current = $instanceValues[path];
+  $: missing = required && simpleType.baseType !== 'boolean' && (current === undefined || current === '') && !node.defaultValue;
+
   function updateValue(event: Event) {
     const input = event.currentTarget as HTMLInputElement;
     instanceValues.update((current) => ({
@@ -16,8 +20,11 @@
   }
 </script>
 
-<label>
-  <span>{node.name}</span>
+<label class:field-missing={missing}>
+  <span>
+    {node.name}{#if required}<span class="required-mark" aria-hidden="true">*</span>{/if}
+    {#if missing}<span class="hint">required</span>{/if}
+  </span>
   {#if simpleType.constraints.enumeration.length > 0}
     <select on:change={updateValue}>
       {#each simpleType.constraints.enumeration as option}
