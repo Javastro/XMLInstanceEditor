@@ -5,7 +5,7 @@ val frontendDir = file("../frontend")
 val generatedWebUiDir = layout.buildDirectory.dir("generated/webui")
 
 plugins {
-    id("io.quarkus") version "3.22.3"
+    id("io.quarkus") version "3.33.4.1"
 }
 
 sourceSets {
@@ -20,13 +20,13 @@ sourceSets {
 }
 
 dependencies {
-    implementation(enforcedPlatform("io.quarkus.platform:quarkus-bom:3.22.3"))
+    implementation(enforcedPlatform("io.quarkus.platform:quarkus-bom:3.33.4.1"))
     implementation(project(":api"))
     implementation(project(":schema-core"))
     implementation("org.javastro.ivoa:ivoa-schema:0.9.14")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-rest-jackson")
-    implementation("io.quarkiverse.quinoa:quarkus-quinoa:2.5.3")
+    implementation("io.quarkiverse.quinoa:quarkus-quinoa:2.8.2")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")

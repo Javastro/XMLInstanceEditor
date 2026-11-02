@@ -37,7 +37,7 @@ Commands:
    `./gradlew test`
 
 Notes:
-- Gradle wrapper is pinned to **8.10.2** for Quarkus compatibility.
+- Gradle wrapper is **9.5.1**; Quarkus is on the 3.33 LTS line (plugin + BOM 3.33.4) with Quinoa 2.8.2 (newer Quinoa needs a newer Quarkus than 3.33).
 - Backend property `xmlinstanceeditor.storage.root-dir` controls local persisted instance storage (default: `backend/build/instances`).
 
 ## Architecture Conventions
